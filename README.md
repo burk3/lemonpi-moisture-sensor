@@ -7,7 +7,7 @@ below the threshold. When this happens an e-mail is sent.
 **DEPENDENCIES:**
 ```bash
 $ pip install python-dotenv --user
-$ pip install jinja2
+$ pip install jinja2 --user
 ```
 
 --------------------
