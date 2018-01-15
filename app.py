@@ -16,9 +16,9 @@ $ pip install jinja2 --user
 
 --------------------
 
-NOTE: GPIO 2/3 are reserved for devices with hard-wired pull-ups.
+**NOTE:** GPIO 2/3 are reserved for devices with hard-wired pull-ups.
 
-NOTE: To use Amazon SES a TXT Record must be added to Namecheap's DNS Entries. Also, free-tier
+**NOTE:** To use Amazon SES a TXT Record must be added to Namecheap's DNS Entries. Also, free-tier
 limits the FROM/TO to **verified** e-mails only. To send from `plantbot@my-domain.com`:
 
 1. Create a catch-all redirect e-mail on namecheap and point it to gmail
@@ -28,12 +28,12 @@ limits the FROM/TO to **verified** e-mails only. To send from `plantbot@my-domai
 
 --------------------
 
-- [ ] TODO: better error handling for when device not found on configured GPIO#
-- [ ] TODO: wrap `DigitalInputDevice` in a `MoistureSensor` class that exposes events like:
+- [ ] **TODO:** better error handling for when device not found on configured GPIO#
+- [ ] **TODO:** wrap `DigitalInputDevice` in a `MoistureSensor` class that exposes events like:
 `on_moisture_loss`
-- [ ] TODO: calibrate it to soil
-- [ ] TODO: can we pull specific moisture levels? (See links below)
-- [ ] TODO: upgrade to python 3?
+- [ ] **TODO:** calibrate it to soil
+- [ ] **TODO:** can we pull specific moisture levels? (See links below)
+- [ ] **TODO:** upgrade to python 3?
 
 --------------------
 
