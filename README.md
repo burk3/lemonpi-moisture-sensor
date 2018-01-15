@@ -1,5 +1,5 @@
-This script assumes a moisture detector, or any DigitalInputDevice for that matter,
-is connected to GPIO17.
+This script assumes a moisture detector is connected to GPIO17 on a Raspberry Pi. Sensor is below:
+http://a.co/21NN4yP
 
 The moisture sensor is activated when removed from water or the moisture level reaches
 below the threshold. When this happens an e-mail is sent.
@@ -7,7 +7,7 @@ below the threshold. When this happens an e-mail is sent.
 **DEPENDENCIES:**
 ```bash
 $ pip install python-dotenv --user
-$ pip install
+$ pip install jinja2
 ```
 
 --------------------
@@ -27,7 +27,7 @@ limits the FROM/TO to **verified** e-mails only. To send from `plantbot@my-domai
 - [ ] TODO: wrap `DigitalInputDevice` in a `MoistureSensor` class that exposes events like:
 `on_moisture_loss`
 - [ ] TODO: calibrate it to soil
-* [ ] TODO: can we pull specific moisture levels? (See links below)
+- [ ] TODO: can we pull specific moisture levels? (See links below)
 - [ ] TODO: upgrade to python 3?
 
 --------------------

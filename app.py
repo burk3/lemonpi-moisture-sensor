@@ -1,7 +1,7 @@
 #!/usr/bin/python
 """
-This script assumes a moisture detector, or any DigitalInputDevice for that matter,
-is connected to GPIO17.
+This script assumes a moisture detector is connected to GPIO17 on a Raspberry Pi. Sensor is below:
+http://a.co/21NN4yP
 
 The moisture sensor is activated when removed from water or the moisture level reaches
 below the threshold. When this happens an e-mail is sent.
@@ -9,7 +9,7 @@ below the threshold. When this happens an e-mail is sent.
 **DEPENDENCIES:**
 ```bash
 $ pip install python-dotenv --user
-$ pip install
+$ pip install jinja2
 ```
 
 --------------------
