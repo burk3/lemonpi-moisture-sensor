@@ -5,6 +5,8 @@ The moisture sensor is activated when removed from water or the moisture level r
 below the threshold. When this happens an e-mail is sent.
 
 **DEPENDENCIES:**
+- Python `2.7.9`
+- Raspbian GNU/Linux 8 (jessie)
 ```bash
 $ pip install python-dotenv --user
 $ pip install jinja2 --user
