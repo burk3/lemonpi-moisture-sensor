@@ -15,6 +15,7 @@ $ pip install jinja2 --user
 --------------------
 
 NOTE: GPIO 2/3 are reserved for devices with hard-wired pull-ups.
+
 NOTE: To use Amazon SES a TXT Record must be added to Namecheap's DNS Entries. Also, free-tier
 limits the FROM/TO to **verified** e-mails only. To send from `plantbot@my-domain.com`:
 
@@ -35,5 +36,7 @@ limits the FROM/TO to **verified** e-mails only. To send from `plantbot@my-domai
 --------------------
 
 See: https://www.modmypi.com/blog/raspberry-pi-plant-pot-moisture-sensor-via-analogue-signals
+
 Also: https://www.raspberrypi.org/forums/viewtopic.php?t=55754
+
 Also: https://www.raspberrypi-spy.co.uk/2013/10/analogue-sensors-on-the-raspberry-pi-using-an-mcp3008/
