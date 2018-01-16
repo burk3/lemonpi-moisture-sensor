@@ -34,6 +34,8 @@ limits the FROM/TO to **verified** e-mails only. To send from `plantbot@my-domai
 - [ ] **TODO:** calibrate it to soil
 - [ ] **TODO:** can we pull specific moisture levels? (See links below)
 - [ ] **TODO:** upgrade to python 3?
+- [ ] **TODO:** keep count of warnings. if reached threshold send an e-mail
+- [ ] **TODO:** limit e-mails via configuration variables
 
 --------------------
 
@@ -60,6 +62,7 @@ load_dotenv( os.path.join( PWD_PATH, '.env' ) )
 
 GPIO_PIN = int( os.getenv( 'GPIO_PIN' ) )
 MOISTURE_SENSOR = DigitalInputDevice( GPIO_PIN )
+WARNING_COUNT = 0
 MESSAGE_OBJ = MIMEMultipart( 'alternative' ) # contains text/plain and text/html
 
 EMAIL_SUBJECT = str( os.getenv( 'EMAIL_SUBJECT' ) )
@@ -95,8 +98,11 @@ def send_email():
 
 def handle_moisture_loss():
     print( Fore.YELLOW + 'Moisture loss detected!' + Style.RESET_ALL )
-    load_email_content()
-    send_email()
+    # load_email_content()
+    # send_email()
+    global WARNING_COUNT
+    WARNING_COUNT += 1
+    print( WARNING_COUNT )
 
 def main():
     if not MOISTURE_SENSOR.is_active:
@@ -109,7 +115,6 @@ def main():
     MOISTURE_SENSOR.when_activated = handle_moisture_loss
 
     try:
-        handle_moisture_loss()
         raw_input(
             Fore.RESET + 'Press ' +
             Fore.YELLOW + 'ENTER ' +
