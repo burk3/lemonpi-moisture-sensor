@@ -53,7 +53,7 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from colorama import Fore, Style
-from gpiozero import DigitalInputDevice
+from gpiozero import DigitalInputDevice, SmoothedInputDevice
 from jinja2 import Environment, FileSystemLoader
 from dotenv import load_dotenv
 
@@ -62,7 +62,15 @@ load_dotenv( os.path.join( PWD_PATH, '.env' ) )
 
 GPIO_PIN = int( os.getenv( 'GPIO_PIN' ) )
 MOISTURE_SENSOR = DigitalInputDevice( GPIO_PIN )
-WARNING_COUNT = 0
+# MOISTURE_SENSOR = SmoothedInputDevice(
+#     int( os.getenv( 'GPIO_PIN' ) ),
+#     threshold=0.1,
+#     queue_len=5,
+#     sample_wait=0.0,
+#     partial=True
+# )
+LOSS_COUNT = 0
+GAIN_COUNT = 0
 MESSAGE_OBJ = MIMEMultipart( 'alternative' ) # contains text/plain and text/html
 
 EMAIL_SUBJECT = str( os.getenv( 'EMAIL_SUBJECT' ) )
@@ -96,23 +104,27 @@ def send_email():
     except smtplib.SMTPException:
         print( Fore.RED + 'ERROR: Unable to send email!' + Style.RESET_ALL )
 
+def handle_moisture_gain():
+    global GAIN_COUNT
+    GAIN_COUNT += 1
+    print(
+        Fore.YELLOW + 'Moisture gain detected! (#' + str( GAIN_COUNT ) + ')' +
+        Style.RESET_ALL
+    )
+
 def handle_moisture_loss():
-    print( Fore.YELLOW + 'Moisture loss detected!' + Style.RESET_ALL )
+    global LOSS_COUNT
+    LOSS_COUNT += 1
+    print(
+        Fore.CYAN + 'Moisture loss detected! (#' + str( LOSS_COUNT ) + ')' +
+        Style.RESET_ALL
+    )
     # load_email_content()
     # send_email()
-    global WARNING_COUNT
-    WARNING_COUNT += 1
-    print( WARNING_COUNT )
 
 def main():
-    if not MOISTURE_SENSOR.is_active:
-        print(
-            Fore.YELLOW + 'WARNING: There is no device active on specified GPIO: ' +
-            Style.BRIGHT + str( GPIO_PIN ) +
-            Style.RESET_ALL
-        )
-
-    MOISTURE_SENSOR.when_activated = handle_moisture_loss
+    MOISTURE_SENSOR.when_activated = handle_moisture_loss # led inactive on microcontroller
+    MOISTURE_SENSOR.when_deactivated = handle_moisture_gain # led active on microcontroller
 
     try:
         raw_input(
