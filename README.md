@@ -13,6 +13,15 @@ $ pip install jinja2 --user
 $ pip install adafruit-mcp3008 --user
 ```
 
+**Globally available as a script**
+```bash
+sudo -i
+PROJECT_ROOT=/home/pi/Projects/moisture-sensor
+ln -s $PROJECT_ROOT/app.py /usr/local/bin/moisture-sensor
+chmod +x /usr/local/bin/moisture-sensor
+exit
+```
+
 --------------------
 
 **NOTE:** GPIO 2/3 are reserved for devices with hard-wired pull-ups.

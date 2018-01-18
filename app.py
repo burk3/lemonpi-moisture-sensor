@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 """
 This script assumes a moisture detector is connected to GPIO17 on a Raspberry Pi. Sensor is below:
 http://a.co/21NN4yP
@@ -13,6 +13,15 @@ below the threshold. When this happens an e-mail is sent.
 $ pip install python-dotenv --user
 $ pip install jinja2 --user
 $ pip install adafruit-mcp3008 --user
+```
+
+**Globally available as a script**
+```bash
+sudo -i
+PROJECT_ROOT=/home/pi/Projects/moisture-sensor
+ln -s $PROJECT_ROOT/app.py /usr/local/bin/moisture-sensor
+chmod +x /usr/local/bin/moisture-sensor
+exit
 ```
 
 --------------------
@@ -66,7 +75,7 @@ from gpiozero import DigitalInputDevice, SmoothedInputDevice
 from jinja2 import Environment, FileSystemLoader
 from dotenv import load_dotenv
 
-PWD_PATH = os.path.dirname( os.path.abspath( __file__ ) )
+PWD_PATH = os.path.dirname( os.path.realpath( __file__ ) )
 load_dotenv( os.path.join( PWD_PATH, '.env' ) )
 
 GPIO_PIN = int( os.getenv( 'GPIO_PIN' ) )
