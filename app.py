@@ -80,7 +80,6 @@ import time
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from colorama import Fore, Style
-from gpiozero import DigitalInputDevice, SmoothedInputDevice
 from jinja2 import Environment, FileSystemLoader
 from dotenv import load_dotenv
 
@@ -90,20 +89,11 @@ import Adafruit_MCP3008
 PWD_PATH = os.path.dirname( os.path.realpath( __file__ ) )
 load_dotenv( os.path.join( PWD_PATH, '.env' ) )
 
-POLLING_RATE = 0.5
 CHANNEL = 0
 SPI_PORT = 0
 SPI_DEVICE = 0
+POLLING_RATE = 0.5
 MCP3008 = Adafruit_MCP3008.MCP3008( spi=SPI.SpiDev( SPI_PORT, SPI_DEVICE ) )
-
-GPIO_PIN = int( os.getenv( 'GPIO_PIN' ) )
-MOISTURE_SENSOR = DigitalInputDevice( GPIO_PIN )
-LOSS_COUNT = 0
-GAIN_COUNT = 0
-MESSAGE_OBJ = MIMEMultipart( 'alternative' ) # contains text/plain and text/html
-
-EMAIL_SUBJECT = str( os.getenv( 'EMAIL_SUBJECT' ) )
-EMAIL_TMPL_FILENAME = str( os.getenv( 'EMAIL_TMPL_FILENAME' ) )
 
 SMTP_HOST = str( os.getenv( 'SMTP_HOST' ) )
 SMTP_PORT = int( os.getenv( 'SMTP_PORT' ) )
@@ -112,9 +102,16 @@ SMTP_PASS = str( os.getenv( 'SMTP_PASS' ) )
 SMTP_FROM = str( os.getenv( 'SMTP_FROM' ) )
 SMTP_TO = str( os.getenv( 'SMTP_TO' ) )
 
+EMAIL_SUBJECT = str( os.getenv( 'EMAIL_SUBJECT' ) )
+EMAIL_TMPL_FILENAME = str( os.getenv( 'EMAIL_TMPL_FILENAME' ) )
+
+MESSAGE_OBJ = MIMEMultipart( 'alternative' ) # contains text/plain and text/html
 MESSAGE_OBJ[ 'Subject' ] = EMAIL_SUBJECT
 MESSAGE_OBJ[ 'From' ] = SMTP_FROM
 MESSAGE_OBJ[ 'To' ] = SMTP_TO
+
+LOSS_COUNT = 0
+GAIN_COUNT = 0
 
 def load_email_content():
     env = Environment( loader=FileSystemLoader( PWD_PATH ), trim_blocks=True )
@@ -134,7 +131,7 @@ def send_email():
         print( Fore.RED + 'ERROR: Unable to send email!' + Style.RESET_ALL )
 
 def handle_moisture_gain():
-    global GAIN_COUNT
+    global GAIN_COUNT # pylint: disable=W0603
     GAIN_COUNT += 1
     print(
         Fore.YELLOW + 'Moisture gain detected! (#' + str( GAIN_COUNT ) + ')' +
@@ -142,7 +139,7 @@ def handle_moisture_gain():
     )
 
 def handle_moisture_loss():
-    global LOSS_COUNT
+    global LOSS_COUNT # pylint: disable=W0603
     LOSS_COUNT += 1
     print(
         Fore.CYAN + 'Moisture loss detected! (#' + str( LOSS_COUNT ) + ')' +
@@ -152,41 +149,27 @@ def handle_moisture_loss():
     # send_email()
 
 def main():
-    MOISTURE_SENSOR.when_activated = handle_moisture_loss # led inactive on microcontroller
-    MOISTURE_SENSOR.when_deactivated = handle_moisture_gain # led active on microcontroller
-
-    try:
-        raw_input(
-            Fore.RESET + 'Press ' +
-            Fore.YELLOW + 'ENTER ' +
-            Fore.RESET + 'or ' +
-            Fore.YELLOW + 'Ctrl + C ' +
-            Fore.RESET + 'to exit' + "\n"
-        )
-    except ( KeyboardInterrupt, EOFError ):
-        pass
-    finally:
-        MOISTURE_SENSOR.close()
-        print( Fore.GREEN + 'Exiting...' + Style.RESET_ALL )
-
-def mcp3008_main():
     prev_value = -1
 
     while True:
         value = MCP3008.read_adc( CHANNEL )
 
         if value != prev_value:
+            if value < prev_value:
+                handle_moisture_gain()
+            elif value > prev_value:
+                handle_moisture_loss()
+
             print(
-                'Value: ' + Fore.YELLOW + str( value ) +
-                Fore.RESET
+                'Value: ' + Style.BRIGHT + str( value ) +
+                Style.RESET_ALL
             )
 
         prev_value = value
         time.sleep( POLLING_RATE )
 
-# main()
 try:
-    mcp3008_main()
+    main()
 except ( KeyboardInterrupt, EOFError ):
     pass
 finally:
