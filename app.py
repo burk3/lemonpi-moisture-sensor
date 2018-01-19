@@ -75,6 +75,7 @@ from __future__ import print_function
 
 import os
 import smtplib
+import time
 
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -83,18 +84,20 @@ from gpiozero import DigitalInputDevice, SmoothedInputDevice
 from jinja2 import Environment, FileSystemLoader
 from dotenv import load_dotenv
 
+import Adafruit_GPIO.SPI as SPI
+import Adafruit_MCP3008
+
 PWD_PATH = os.path.dirname( os.path.realpath( __file__ ) )
 load_dotenv( os.path.join( PWD_PATH, '.env' ) )
 
+POLLING_RATE = 0.5
+CHANNEL = 0
+SPI_PORT = 0
+SPI_DEVICE = 0
+MCP3008 = Adafruit_MCP3008.MCP3008( spi=SPI.SpiDev( SPI_PORT, SPI_DEVICE ) )
+
 GPIO_PIN = int( os.getenv( 'GPIO_PIN' ) )
 MOISTURE_SENSOR = DigitalInputDevice( GPIO_PIN )
-# MOISTURE_SENSOR = SmoothedInputDevice(
-#     int( os.getenv( 'GPIO_PIN' ) ),
-#     threshold=0.1,
-#     queue_len=5,
-#     sample_wait=0.0,
-#     partial=True
-# )
 LOSS_COUNT = 0
 GAIN_COUNT = 0
 MESSAGE_OBJ = MIMEMultipart( 'alternative' ) # contains text/plain and text/html
@@ -166,4 +169,25 @@ def main():
         MOISTURE_SENSOR.close()
         print( Fore.GREEN + 'Exiting...' + Style.RESET_ALL )
 
-main()
+def mcp3008_main():
+    prev_value = -1
+
+    while True:
+        value = MCP3008.read_adc( CHANNEL )
+
+        if value != prev_value:
+            print(
+                'Value: ' + Fore.YELLOW + str( value ) +
+                Fore.RESET
+            )
+
+        prev_value = value
+        time.sleep( POLLING_RATE )
+
+# main()
+try:
+    mcp3008_main()
+except ( KeyboardInterrupt, EOFError ):
+    pass
+finally:
+    print( Fore.GREEN + 'Exiting...' + Style.RESET_ALL )
