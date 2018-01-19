@@ -65,7 +65,7 @@ http://www.raspberrypi-spy.co.uk/2014/08/enabling-the-spi-interface-on-the-raspb
 --------------------
 
 - [ ] **TODO:** better error handling for when device not found on configured GPIO#
-- [ ] **TODO:** calibrate it to soil
+- [ ] **TODO:** calibrate it to soil: ~497-600 when soil is wet
 - [x] ~~**TODO:** can we pull specific moisture levels? (See links below)~~
 - [ ] **TODO:** upgrade to python 3?
 - [ ] **TODO:** keep count of warnings. if reached threshold send an e-mail
@@ -75,8 +75,8 @@ http://www.raspberrypi-spy.co.uk/2014/08/enabling-the-spi-interface-on-the-raspb
 from __future__ import print_function
 
 import os
-import smtplib
 import time
+import smtplib
 
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
