@@ -8,9 +8,9 @@ below the threshold. When this happens an e-mail is sent.
 - Python `2.7.9`
 - Raspbian GNU/Linux 8 (jessie)
 ```bash
-$ pip install python-dotenv --user
-$ pip install jinja2 --user
-$ pip install adafruit-mcp3008 --user
+$ sudo pip install python-dotenv
+$ sudo pip install jinja2
+$ sudo pip install adafruit-mcp3008
 ```
 
 **Globally available as a script**
@@ -38,14 +38,25 @@ exit
 To read specific moisture levels the sensor's analog signal must be used. Unfortunately, Raspberry PI doesn't support analog ootb so the following are needed:
 - Adafruit MCP3008 (ADC): https://www.adafruit.com/product/856
 - Half/Full breadboard: http://a.co/7MVedwJ
-- Adafruit RPi cobbler: https://www.adafruit.com/product/914
+- Adafruit RPi cobbler: ~~https://www.adafruit.com/product/914~~ WRONG ONE
 
-Adafruit is awesome enough to provide an easy to use library to interact with the MCP3008 and get readings from its channels. Along with examples:
+Adafruit provides an easy to use library to interact with the MCP3008 and get readings from its channels. Along with examples:
 https://github.com/adafruit/Adafruit_Python_MCP3008
+
+--------------------
+
+**Wire up the MCP3008**
+https://learn.adafruit.com/raspberry-pi-analog-to-digital-converters/mcp3008#wiring
+
+NOTE: I used hardware SPI which needs to be enabled:
+http://www.raspberrypi-spy.co.uk/2014/08/enabling-the-spi-interface-on-the-raspberry-pi/
+
+--------------------
 
 - See: https://www.modmypi.com/blog/raspberry-pi-plant-pot-moisture-sensor-via-analogue-signals
 - Also: https://www.raspberrypi.org/forums/viewtopic.php?t=55754
 - Also: https://www.raspberrypi-spy.co.uk/2013/10/analogue-sensors-on-the-raspberry-pi-using-an-mcp3008/
+- Also: https://computers.tutsplus.com/tutorials/build-a-raspberry-pi-moisture-sensor-to-monitor-your-plants--mac-52875
 
 --------------------
 
