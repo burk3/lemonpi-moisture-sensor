@@ -15,11 +15,11 @@ $ sudo pip install adafruit-mcp3008
 
 **Globally available as a script**
 ```bash
-sudo -i
-PROJECT_ROOT=/home/pi/Projects/moisture-sensor
-ln -s $PROJECT_ROOT/app.py /usr/local/bin/moisture-sensor
-chmod +x /usr/local/bin/moisture-sensor
-exit
+$ sudo -i
+$ PROJECT_ROOT=/home/pi/Projects/moisture-sensor
+$ ln -s $PROJECT_ROOT/app.py /usr/local/bin/moisture-sensor
+$ chmod +x /usr/local/bin/moisture-sensor
+$ exit
 ```
 
 --------------------
@@ -43,28 +43,29 @@ To read specific moisture levels the sensor's analog signal must be used. Unfort
 Adafruit provides an easy to use library to interact with the MCP3008 and get readings from its channels. Along with examples:
 https://github.com/adafruit/Adafruit_Python_MCP3008
 
---------------------
 
 **Wire up the MCP3008**
+
 https://learn.adafruit.com/raspberry-pi-analog-to-digital-converters/mcp3008#wiring
 
-NOTE: I used hardware SPI which needs to be enabled:
+*NOTE: I used hardware SPI which needs to be enabled:*
+
 http://www.raspberrypi-spy.co.uk/2014/08/enabling-the-spi-interface-on-the-raspberry-pi/
 
 --------------------
+**Resources**
 
-- See: https://www.modmypi.com/blog/raspberry-pi-plant-pot-moisture-sensor-via-analogue-signals
-- Also: https://www.raspberrypi.org/forums/viewtopic.php?t=55754
-- Also: https://www.raspberrypi-spy.co.uk/2013/10/analogue-sensors-on-the-raspberry-pi-using-an-mcp3008/
-- Also: https://computers.tutsplus.com/tutorials/build-a-raspberry-pi-moisture-sensor-to-monitor-your-plants--mac-52875
+- https://www.modmypi.com/blog/raspberry-pi-plant-pot-moisture-sensor-via-analogue-signals
+- https://www.raspberrypi.org/forums/viewtopic.php?t=55754
+- https://www.raspberrypi-spy.co.uk/2013/10/analogue-sensors-on-the-raspberry-pi-using-an-mcp3008/
+- https://computers.tutsplus.com/tutorials/build-a-raspberry-pi-moisture-sensor-to-monitor-your-plants--mac-52875
 
 --------------------
 
 - [ ] **TODO:** better error handling for when device not found on configured GPIO#
-- [ ] **TODO:** wrap `DigitalInputDevice` in a `MoistureSensor` class that exposes events like:
-`on_moisture_loss`
 - [ ] **TODO:** calibrate it to soil
-- [ ] **TODO:** can we pull specific moisture levels? (See links below)
+- [x] ~~**TODO:** can we pull specific moisture levels? (See links below)~~
 - [ ] **TODO:** upgrade to python 3?
 - [ ] **TODO:** keep count of warnings. if reached threshold send an e-mail
 - [ ] **TODO:** limit e-mails via configuration variables
+- [ ] **TODO:** non-blocking keyboard input using threads (https://stackoverflow.com/a/19655992)
