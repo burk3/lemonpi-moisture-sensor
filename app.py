@@ -71,7 +71,7 @@ http://www.raspberrypi-spy.co.uk/2014/08/enabling-the-spi-interface-on-the-raspb
 - [ ] **TODO:** keep count of warnings. if reached threshold send an e-mail
 - [ ] **TODO:** limit e-mails via configuration variables
 - [ ] **TODO:** non-blocking keyboard input using threads (https://stackoverflow.com/a/19655992)
-- [ ] **TODO:** better logging for monitoring battery usage and soil calibration
+- [x] ~~**TODO:** better logging for monitoring battery usage and soil calibration~~
 """
 from __future__ import print_function
 
