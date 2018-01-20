@@ -65,7 +65,7 @@ http://www.raspberrypi-spy.co.uk/2014/08/enabling-the-spi-interface-on-the-raspb
 --------------------
 
 - [ ] **TODO:** better error handling for when device not found on configured GPIO#
-- [ ] **TODO:** calibrate it to soil: ~497-600 when soil is wet
+- [ ] **TODO:** calibrate it to soil: ~497-600 when soil is recently watered. slowly goes up to ~850 over 4hours
 - [x] ~~**TODO:** can we pull specific moisture levels? (See links below)~~
 - [ ] **TODO:** upgrade to python 3?
 - [ ] **TODO:** keep count of warnings. if reached threshold send an e-mail
@@ -90,10 +90,10 @@ import Adafruit_MCP3008
 PWD_PATH = os.path.dirname( os.path.realpath( __file__ ) )
 load_dotenv( os.path.join( PWD_PATH, '.env' ) )
 
-CHANNEL = 0
-SPI_PORT = 0
-SPI_DEVICE = 0
-POLLING_RATE = 0.5
+CHANNEL = int( os.getenv( 'CHANNEL' ) )
+SPI_PORT = int( os.getenv( 'SPI_PORT' ) )
+SPI_DEVICE = int( os.getenv( 'SPI_DEVICE' ) )
+POLLING_RATE = float( os.getenv( 'POLLING_RATE' ) )
 MCP3008 = Adafruit_MCP3008.MCP3008( spi=SPI.SpiDev( SPI_PORT, SPI_DEVICE ) )
 
 SMTP_HOST = str( os.getenv( 'SMTP_HOST' ) )

@@ -63,7 +63,7 @@ http://www.raspberrypi-spy.co.uk/2014/08/enabling-the-spi-interface-on-the-raspb
 --------------------
 
 - [ ] **TODO:** better error handling for when device not found on configured GPIO#
-- [ ] **TODO:** calibrate it to soil
+- [ ] **TODO:** calibrate it to soil: ~497-600 when soil is recently watered. slowly goes up to ~850 over 4hours
 - [x] ~~**TODO:** can we pull specific moisture levels? (See links below)~~
 - [ ] **TODO:** upgrade to python 3?
 - [ ] **TODO:** keep count of warnings. if reached threshold send an e-mail
