@@ -76,11 +76,15 @@ http://www.raspberrypi-spy.co.uk/2014/08/enabling-the-spi-interface-on-the-raspb
 from __future__ import print_function
 
 import os
+import sys
 import time
 import smtplib
+import logging
+import logging.handlers
 
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+
 from colorama import Fore, Style
 from jinja2 import Environment, FileSystemLoader
 from dotenv import load_dotenv
@@ -90,6 +94,14 @@ import Adafruit_MCP3008
 
 PWD_PATH = os.path.dirname( os.path.realpath( __file__ ) )
 load_dotenv( os.path.join( PWD_PATH, '.env' ) )
+
+LOG_ENABLE = bool( os.getenv( 'LOG_ENABLE' ) )
+LOG_MAXSIZE = int( os.getenv( 'LOG_MAXSIZE' ) )
+LOG_PATH = str( os.getenv( 'LOG_PATH' ) )
+LOG_FILENAME = str( os.path.basename( __file__ ) + '.log' )
+LOG_FULLPATH = LOG_PATH + '/' + LOG_FILENAME
+LOG_FORMAT = logging.Formatter( '%(asctime)s %(message)s' )
+LOGGER = logging.getLogger( LOG_FILENAME )
 
 CHANNEL = int( os.getenv( 'CHANNEL' ) )
 SPI_PORT = int( os.getenv( 'SPI_PORT' ) )
@@ -115,6 +127,26 @@ MESSAGE_OBJ[ 'To' ] = SMTP_TO
 LOSS_COUNT = 0
 GAIN_COUNT = 0
 
+def check_log_dir():
+    if os.path.exists( LOG_PATH ):
+        return
+
+    try:
+        os.makedirs( LOG_PATH )
+    except OSError:
+        raise # TODO: disable logging?
+
+def init_logging():
+    handler = logging.handlers.RotatingFileHandler( filename=LOG_FULLPATH, maxBytes=1024*LOG_MAXSIZE, backupCount=10 )
+    handler.setFormatter( LOG_FORMAT )
+
+    print_handler = logging.StreamHandler( stream=sys.stdout )
+    print_handler.setFormatter( LOG_FORMAT )
+
+    LOGGER.setLevel( logging.INFO )
+    LOGGER.addHandler( print_handler )
+    LOGGER.addHandler( handler )
+
 def load_email_content():
     env = Environment( loader=FileSystemLoader( PWD_PATH ), trim_blocks=True )
     msg = env.get_template( EMAIL_TMPL_FILENAME ).render()
@@ -135,7 +167,7 @@ def send_email():
 def handle_moisture_gain():
     global GAIN_COUNT # pylint: disable=W0603
     GAIN_COUNT += 1
-    print(
+    LOGGER.info(
         Fore.YELLOW + 'Moisture gain detected! (#' + str( GAIN_COUNT ) + ')' +
         Style.RESET_ALL
     )
@@ -143,7 +175,7 @@ def handle_moisture_gain():
 def handle_moisture_loss():
     global LOSS_COUNT # pylint: disable=W0603
     LOSS_COUNT += 1
-    print(
+    LOGGER.info(
         Fore.CYAN + 'Moisture loss detected! (#' + str( LOSS_COUNT ) + ')' +
         Style.RESET_ALL
     )
@@ -162,7 +194,7 @@ def main():
             elif value > prev_value:
                 handle_moisture_loss()
 
-            print(
+            LOGGER.info(
                 'Value: ' + Style.BRIGHT + str( value ) +
                 Style.RESET_ALL
             )
@@ -171,8 +203,12 @@ def main():
         time.sleep( POLLING_RATE )
 
 try:
+    check_log_dir()
+    init_logging()
+
+    # monitor moisture level logic
     main()
 except ( KeyboardInterrupt, EOFError ):
     pass
 finally:
-    print( Fore.GREEN + 'Exiting...' + Style.RESET_ALL )
+    LOGGER.info( Fore.GREEN + 'Exiting...' + Style.RESET_ALL )
