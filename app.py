@@ -72,6 +72,7 @@ http://www.raspberrypi-spy.co.uk/2014/08/enabling-the-spi-interface-on-the-raspb
 - [ ] **TODO:** limit e-mails via configuration variables
 - [ ] **TODO:** non-blocking keyboard input using threads (https://stackoverflow.com/a/19655992)
 - [x] ~~**TODO:** better logging for monitoring battery usage and soil calibration~~
+- [ ] **TODO:** https://setuptools.readthedocs.io/en/latest/setuptools.html
 """
 from __future__ import print_function
 
